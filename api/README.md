@@ -1,6 +1,6 @@
 # SQA Social Media API
 
-API REST desenvolvida em Spring Boot que server como backend da aplicação. Ele gerencia autenticação, usuários, posts curtidos e integração com a API pública [DummyJSON](https://dummyjson.com/docs).
+API REST desenvolvida em Spring Boot que serve como backend da aplicação. Ele gerencia autenticação, usuários, posts curtidos e integração com a API pública [DummyJSON](https://dummyjson.com/docs).
 
 ## Visão Geral
 
