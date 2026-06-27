@@ -1,0 +1,408 @@
+{
+  "info": {
+    "_postman_id": "sqa-social-media-api-tests",
+    "name": "SQA Social Media - API Tests",
+    "description": "Coleção de testes de API para o projeto SQA Social Media",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "testEmail",
+      "value": "teste_newman@email.com"
+    },
+    {
+      "key": "testPassword",
+      "value": "Senha@Newman123"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth - Signup",
+      "item": [
+        {
+          "name": "Signup com dados válidos - deve retornar 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Resposta deve conter email', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.email).to.eql(pm.collectionVariables.get('testEmail'));",
+                  "});",
+                  "pm.test('Resposta deve conter id', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.id).to.be.a('number');",
+                  "  pm.collectionVariables.set('userId', body.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"{{testEmail}}\", \"password\": \"{{testPassword}}\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+          }
+        },
+        {
+          "name": "Signup com email duplicado - deve retornar 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 409', function() {",
+                  "  pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test('Mensagem de erro correta', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.message).to.include('E-mail já está em uso');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"{{testEmail}}\", \"password\": \"{{testPassword}}\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+          }
+        },
+        {
+          "name": "Signup com email inválido - deve retornar 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 422', function() {",
+                  "  pm.response.to.have.status(422);",
+                  "});",
+                  "pm.test('Mensagem de erro correta', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.message).to.include('E-mail inválido');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"semArroba\", \"password\": \"Senha@123\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+          }
+        },
+        {
+          "name": "Signup com senha fraca - deve retornar 422",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 422', function() {",
+                  "  pm.response.to.have.status(422);",
+                  "});",
+                  "pm.test('Mensagem de erro correta', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.message).to.include('Senha inválida');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"outro@email.com\", \"password\": \"fraca\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Signin",
+      "item": [
+        {
+          "name": "Signin com credenciais válidas - deve retornar 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Resposta deve conter email', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.email).to.eql(pm.collectionVariables.get('testEmail'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"{{testEmail}}\", \"password\": \"{{testPassword}}\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signin", "host": ["{{baseUrl}}"], "path": ["auth", "signin"] }
+          }
+        },
+        {
+          "name": "Signin com senha errada - deve retornar 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 401', function() {",
+                  "  pm.response.to.have.status(401);",
+                  "});",
+                  "pm.test('Mensagem de credenciais inválidas', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.message).to.include('Credenciais inválidas');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"{{testEmail}}\", \"password\": \"SenhaErrada@99\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/signin", "host": ["{{baseUrl}}"], "path": ["auth", "signin"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "GET /posts - deve retornar lista de posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Resposta deve conter array de posts', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.posts).to.be.an('array');",
+                  "  pm.expect(body.posts.length).to.be.greaterThan(0);",
+                  "});",
+                  "pm.test('Cada post deve ter campo reactions com likes e dislikes', function() {",
+                  "  const body = pm.response.json();",
+                  "  body.posts.forEach(function(post) {",
+                  "    pm.expect(post).to.have.property('reactions');",
+                  "    pm.expect(post.reactions).to.have.property('likes');",
+                  "    pm.expect(post.reactions).to.have.property('dislikes');",
+                  "    pm.expect(post.reactions.likes).to.be.a('number');",
+                  "    pm.expect(post.reactions.dislikes).to.be.a('number');",
+                  "  });",
+                  "});",
+                  "pm.test('Cada post deve ter campo liked', function() {",
+                  "  const body = pm.response.json();",
+                  "  body.posts.forEach(function(post) {",
+                  "    pm.expect(post).to.have.property('liked');",
+                  "  });",
+                  "});",
+                  "pm.test('Resposta deve ter campos de paginação', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('total');",
+                  "  pm.expect(body).to.have.property('skip');",
+                  "  pm.expect(body).to.have.property('limit');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts?limit=5&skip=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"],
+              "query": [
+                { "key": "limit", "value": "5" },
+                { "key": "skip", "value": "0" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /posts/:id/like - deve fazer toggle de like",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Resposta deve conter postId e liked', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('postId');",
+                  "  pm.expect(body).to.have.property('liked');",
+                  "  pm.expect(body.liked).to.be.a('boolean');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1/like?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1", "like"],
+              "query": [{ "key": "userId", "value": "{{userId}}" }]
+            }
+          }
+        },
+        {
+          "name": "GET /posts/liked - deve retornar posts curtidos do usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Resposta deve conter array de posts', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.posts).to.be.an('array');",
+                  "});",
+                  "pm.test('Posts curtidos devem ter reactions', function() {",
+                  "  const body = pm.response.json();",
+                  "  body.posts.forEach(function(post) {",
+                  "    pm.expect(post).to.have.property('reactions');",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/liked?userId={{userId}}&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "liked"],
+              "query": [
+                { "key": "userId", "value": "{{userId}}" },
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Reset Password",
+      "item": [
+        {
+          "name": "Reset password para email existente - deve retornar 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 200', function() {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"{{testEmail}}\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["auth", "reset-password"] }
+          }
+        },
+        {
+          "name": "Reset password para email inexistente - deve retornar 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status deve ser 404', function() {",
+                  "  pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test('Mensagem de usuário não encontrado', function() {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.message).to.include('Usuário não encontrado');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"naocadastrado@exemplo.com\"}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["auth", "reset-password"] }
+          }
+        }
+      ]
+    }
+  ]
+}

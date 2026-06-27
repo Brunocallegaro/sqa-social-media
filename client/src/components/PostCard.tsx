@@ -37,6 +37,9 @@ export default function PostCard({
     }
   }
 
+  const likes = post.reactions?.likes ?? 0;
+  const dislikes = post.reactions?.dislikes ?? 0;
+
   return (
     <div
       role="listitem"
@@ -76,6 +79,26 @@ export default function PostCard({
       >
         {post.body}
       </p>
+
+      {/* Contadores de reactions da DummyJSON */}
+      <div
+        data-testid="reactions"
+        style={{
+          display: "flex",
+          gap: "1rem",
+          marginBottom: "1rem",
+          fontSize: "0.9rem",
+          color: "var(--foreground)",
+          opacity: 0.8,
+        }}
+      >
+        <span data-testid="likes-count" title="Curtidas">
+          👍 {likes}
+        </span>
+        <span data-testid="dislikes-count" title="Descurtidas">
+          👎 {dislikes}
+        </span>
+      </div>
 
       <div
         style={{
